@@ -1,0 +1,52 @@
+html {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: 10% auto 10%;
+    grid-template-areas: 
+    "header"
+    "mainContent"
+    "footer";
+}
+
+header {
+    grid-area: header;
+    background-color: rgb(33,39,40);
+    margin: 0px;
+}
+
+.companyLogo {
+    position: fixed;
+    height: 8%;
+    top: 1%;
+    left: 2%;
+    border-radius: 50%;
+}
+
+.bodyContent {
+    grid-area: mainContent;
+    background-color: rgb(95,106,106);
+    margin: 0px;
+    text-align: center;
+}
+
+.titleContent {
+    font-size: 5vmax;
+}
+
+.menuContent > * {
+    color: white;   
+    font-size: 2vmax;
+    text-shadow: 2px 2px 4px rgb(0, 0, 10);
+}
+
+
+footer {
+    grid-area: footer;
+    background-color: rgb(203, 43, 35);
+}
+
