@@ -15,6 +15,11 @@ public class HomeCooking {
     private long mealId;
     private String itemName;
 
+    protected HomeCooking(long mealId, String itemName) {
+        this.mealId = mealId;
+        this.itemName = itemName;
+    }
+
     public long getHomeCookingId() {
         return HomeCookingId;
     }

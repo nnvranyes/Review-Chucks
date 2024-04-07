@@ -1,6 +1,6 @@
 package com.vranyes.chucksmealfetcher;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,18 +9,21 @@ import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 
 @Entity
-public class Meals {
+public class Meal {
     @Id
     @SequenceGenerator(name = "meals_seqance", sequenceName = "meals_seqance")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "meals_seqance")
     private long mealId;
     private String mealType;
-    private Date mealDate;
+    private Calendar mealDate;
+    private String otherComments;
 
-    public Meals(long mealId, String mealType, Date mealDate) {
-        this.mealId = mealId;
+    
+
+    public Meal(String mealType, Calendar mealDate, String otherComments) {
         this.mealType = mealType;
         this.mealDate = mealDate;
+        this.otherComments = otherComments;
     }
 
     public long getMealId() {
@@ -39,12 +42,20 @@ public class Meals {
         this.mealType = mealType;
     }
     
-    public Date getMealDate() {
+    public Calendar getMealDate() {
         return mealDate;
     }
     
-    public void setMealDate(Date mealDate) {
+    public void setMealDate(Calendar mealDate) {
         this.mealDate = mealDate;
+    }
+
+    public String getOtherComments() {
+        return otherComments;
+    }
+
+    public void setOtherComments(String otherComments) {
+        this.otherComments = otherComments;
     }
     
 }

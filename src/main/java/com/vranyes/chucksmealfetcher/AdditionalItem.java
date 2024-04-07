@@ -7,7 +7,7 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.GenerationType;
 
 @Entity
-public class AdditionalItems {
+public class AdditionalItem {
     
     @Id
     @SequenceGenerator(name = "additional_items_sequence", sequenceName = "additional_items_sequence")
@@ -15,6 +15,11 @@ public class AdditionalItems {
     private long additionalItemId;
     private long mealId;
     private String itemName;
+
+    protected AdditionalItem(long mealId, String itemName) {
+        this.mealId = mealId;
+        this.itemName = itemName;
+    }
 
     public long getAdditionalItemId() {
         return additionalItemId;
