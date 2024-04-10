@@ -4,7 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.Calendar;
 
-public class JsonToMealsParser {
+public class JsonToMealsDB {
 
     protected static Meal[] parseMeals(JSONObject json) {
         JSONArray mealsJson = json.getJSONArray("meals");
