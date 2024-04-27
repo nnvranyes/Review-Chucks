@@ -3,48 +3,64 @@ package com.vranyes.chucksmealfetcher;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.Calendar;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class JsonToMealsDB {
 
-    protected static Meal[] parseMeals(JSONObject json) {
+    private final MealRepository mealRepository;
+    private final HomeCookingRepository homeCookingRepository;
+    private final AdditionalItemRepository additionalItemRepository;
+
+    public JsonToMealsDB(MealRepository mealRepository, HomeCookingRepository homeCookingRepository, AdditionalItemRepository additionalItemRepository) {
+        this.mealRepository = mealRepository;
+        this.homeCookingRepository = homeCookingRepository;
+        this.additionalItemRepository = additionalItemRepository;
+    }
+
+    protected void parseMeals(JSONObject json) {
         JSONArray mealsJson = json.getJSONArray("meals");
-        Meal[] meals = new Meal[mealsJson.length()];
+        json.toString();
         Calendar mealDate = getCalendearFromString(json.getString("entrydateformatted"));
         for (int i = 0; i < mealsJson.length(); i++) {
             JSONObject mealJson = mealsJson.getJSONObject(i);
             Meal meal = parseMeal(mealJson, mealDate);
-            meals[i] = meal;
+            mealRepository.save(meal);   
+            long mealId = meal.getMealId();
+            List<HomeCooking> homeCooking = stringArrayToHomeCookingList(jsonStringArrayToStringArray(mealJson.getJSONArray("menudescription")), mealId);
+            homeCookingRepository.saveAll(homeCooking);
+            List<AdditionalItem> additionalItems = stringArrayToAdditionalItemList(jsonStringArrayToStringArray(mealJson.getJSONArray("specialslist")), mealId);
+            additionalItemRepository.saveAll(additionalItems);
         }
-        return meals;
     }
 
-    private static Meal parseMeal (JSONObject mealJson, Calendar mealDate) {
+
+    private Meal parseMeal (JSONObject mealJson, Calendar mealDate) {
         String mealType = mealJson.getString("mealtime");
         String otherCommments = mealJson.getString("othercomments");
-        String[] homeCooking = jsonStringArrayToStringArray(mealJson.getJSONArray("menudescription"));
-        String[] AdditionalItems = jsonStringArrayToStringArray(mealJson.getJSONArray("specialslist"));
-
         Meal meal = new Meal(mealType, mealDate, otherCommments);
+        
         return meal;
     } 
 
-    private static HomeCooking[] stringArrayToHomeCookingArray(String[] homeCookingArray, long mealId) {
-        HomeCooking[] homeCooking = new HomeCooking[homeCookingArray.length];
+    private List<HomeCooking> stringArrayToHomeCookingList(String[] homeCookingArray, long mealId) {
+        List<HomeCooking> homeCookingList = new ArrayList<>();
         for (int i = 0; i < homeCookingArray.length; i++) {
-            homeCooking[i] = new HomeCooking(mealId, homeCookingArray[i]);
+            homeCookingList.add(new HomeCooking(mealId, homeCookingArray[i]));
         }
-        return homeCooking;
+        return homeCookingList;
     }
 
-    private static AdditionalItem[] stringArrayToAdditionalItemArray(String[] additionalItemArray, long mealId) {
-        AdditionalItem[] additionalItems = new AdditionalItem[additionalItemArray.length];
+    private List<AdditionalItem> stringArrayToAdditionalItemList(String[] additionalItemArray, long mealId) {
+        List<AdditionalItem> additionalItems = new ArrayList<>();
         for (int i = 0; i < additionalItemArray.length; i++) {
-            additionalItems[i] = new AdditionalItem(mealId, additionalItemArray[i]);
+            additionalItems.add(new AdditionalItem(mealId, additionalItemArray[i]));
         }
         return additionalItems;
     }
 
-    private static Calendar getCalendearFromString(String date) {
+    private Calendar getCalendearFromString(String date) {
         String[] dateParts = date.split(" |, ");
         int month = monthToInt(dateParts[0]);
         int day = Integer.parseInt(dateParts[1]);
@@ -54,7 +70,7 @@ public class JsonToMealsDB {
         return calendar;
     }
 
-    private static String[] jsonStringArrayToStringArray(JSONArray jsonArray) {
+    private String[] jsonStringArrayToStringArray(JSONArray jsonArray) {
         String[] stringArray = new String[jsonArray.length()];
         for (int i = 0; i < jsonArray.length(); i++) {
             stringArray[i] = jsonArray.getString(i);

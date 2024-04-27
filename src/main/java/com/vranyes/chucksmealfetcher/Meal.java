@@ -18,7 +18,8 @@ public class Meal {
     private Calendar mealDate;
     private String otherComments;
 
-    
+    public Meal() {
+    }
 
     public Meal(String mealType, Calendar mealDate, String otherComments) {
         this.mealType = mealType;

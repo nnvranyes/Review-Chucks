@@ -16,6 +16,9 @@ public class AdditionalItem {
     private long mealId;
     private String itemName;
 
+    public AdditionalItem() {
+    }
+
     protected AdditionalItem(long mealId, String itemName) {
         this.mealId = mealId;
         this.itemName = itemName;

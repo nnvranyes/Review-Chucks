@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.net.URL;
 import java.net.URI;
 
 
@@ -14,9 +13,17 @@ import java.nio.charset.Charset;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.stereotype.Component;
+
 import java.net.URISyntaxException;
 
 public class JsonReader {
+
+  private final String url;
+
+  public JsonReader(String url) {
+    this.url = url;
+  }
 
   private static String readJsonFromURL(Reader bufferedReaderFromURL) throws IOException {
     StringBuilder stringBuilder = new StringBuilder();
@@ -30,8 +37,8 @@ public class JsonReader {
   private static String removeBrackets(String string) {
     return string.substring(1, string.length() - 1);
   }
-//TODO: Fix depercated "URL()" constructor
-public JSONObject readJsonFromUrl(String url) throws IOException, JSONException, URISyntaxException {
+
+public JSONObject readJsonFromUrl() throws IOException, JSONException, URISyntaxException {
     try {
         InputStream is = new URI(url).toURL().openStream();
     
